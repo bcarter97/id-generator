@@ -13,6 +13,8 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
 
+publish / skip := true
+
 libraryDependencies ++= all
 
 // Formatting aliases
