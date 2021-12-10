@@ -18,7 +18,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Run tests
-        run: sbt ci
       - name: Coursier cache
         uses: coursier/cache-action@v6
+      - name: Run tests
+        run: sbt ci
+
