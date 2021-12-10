@@ -5,6 +5,7 @@ organization      := "io.github.bcarter97"
 name              := "id-generator"
 semanticdbEnabled := true
 semanticdbVersion := scalafixSemanticdb.revision
+publishArtifact   := false
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
 
