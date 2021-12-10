@@ -21,4 +21,4 @@ addCommandAlias("checkFmt", "scalafmtCheckAll; scalafmtSbtCheck")
 addCommandAlias("runFmt", "scalafmtAll; scalafmtSbt")
 
 // CI aliases
-addCommandAlias(s"id-generator-ci", "checkFix; checkFmt; test")
+addCommandAlias(s"ci", "checkFix; checkFmt; test")
