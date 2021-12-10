@@ -5,12 +5,15 @@ organization      := "io.github.bcarter97"
 name              := "id-generator"
 semanticdbEnabled := true
 semanticdbVersion := scalafixSemanticdb.revision
+publishArtifact   := false
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+
+publish / skip := true
 
 libraryDependencies ++= all
 
