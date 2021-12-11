@@ -10,12 +10,12 @@ organization := "io.github.bcarter97"
 name         := "id-generator"
 description  := "A library for generating reproducible UUIDs"
 
-ThisBuild / semanticdbEnabled                              := true
-ThisBuild / semanticdbVersion                              := scalafixSemanticdb.revision
-ThisBuild / scalaVersion                                   := scala3
-ThisBuild / crossScalaVersions                             := supportedScalaVersions
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
-ThisBuild / releaseCrossBuild                              := true // true if you cross-build the project for multiple Scala versions
+semanticdbEnabled                              := true
+semanticdbVersion                              := scalafixSemanticdb.revision
+scalaVersion                                   := scala3
+crossScalaVersions                             := supportedScalaVersions
+scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+releaseCrossBuild                              := true // true if you cross-build the project for multiple Scala versions
 
 releaseProcess                := Seq[ReleaseStep](
   checkSnapshotDependencies,
