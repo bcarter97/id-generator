@@ -19,7 +19,7 @@ ThisBuild / releaseProcess         := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
-  runTest,
+  releaseStepCommandAndRemaining("+test"),
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
