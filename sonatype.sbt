@@ -14,18 +14,3 @@ ThisBuild / publishTo              := {
   else Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
 ThisBuild / versionScheme          := Some("early-semver")
-ThisBuild / releaseCrossBuild      := true // true if you cross-build the project for multiple Scala versions
-ThisBuild / releaseProcess         := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  releaseStepCommandAndRemaining("+test"),
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  releaseStepCommandAndRemaining("+publishSigned"),
-  releaseStepCommand("sonatypeBundleRelease"),
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
-)

@@ -14,8 +14,23 @@ ThisBuild / semanticdbVersion                              := scalafixSemanticdb
 ThisBuild / scalaVersion                                   := scala3
 ThisBuild / crossScalaVersions                             := supportedScalaVersions
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ThisBuild / releaseCrossBuild                              := true // true if you cross-build the project for multiple Scala versions
+ThisBuild / releaseProcess                                 := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  releaseStepCommandAndRemaining("+test"),
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  releaseStepCommand("sonatypeBundleRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
 
-Global / onChangedBuildSource := ReloadOnSourceChanges
+Global / onChangedBuildSource                              := ReloadOnSourceChanges
 
 libraryDependencies ++= all
 
