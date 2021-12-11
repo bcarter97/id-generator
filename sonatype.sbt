@@ -10,9 +10,8 @@ ThisBuild / sonatypeProjectHosting := Some(GitHubHosting("bcarter97", "id-genera
 ThisBuild / pomIncludeRepository   := { _ => false }
 ThisBuild / publishTo              := sonatypePublishToBundle.value
 ThisBuild / versionScheme          := Some("early-semver")
-
-releaseCrossBuild := true // true if you cross-build the project for multiple Scala versions
-releaseProcess    := Seq[ReleaseStep](
+ThisBuild / releaseCrossBuild      := true // true if you cross-build the project for multiple Scala versions
+ThisBuild / releaseProcess         := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
