@@ -1,4 +1,5 @@
 import Dependencies.all
+import ReleaseTransformations._
 
 lazy val scala3                 = "3.1.0"
 lazy val scala213               = "2.13.7"

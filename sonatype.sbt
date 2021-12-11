@@ -1,5 +1,4 @@
 import xerial.sbt.Sonatype._
-import ReleaseTransformations._
 
 // To sync with Maven central, you need to supply the following information:
 ThisBuild / licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
