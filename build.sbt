@@ -1,19 +1,21 @@
 import Dependencies.all
 
-scalaVersion      := "3.1.0"
-organization      := "io.github.bcarter97"
-name              := "id-generator"
-semanticdbEnabled := true
-semanticdbVersion := scalafixSemanticdb.revision
-publishArtifact   := false
+lazy val scala3                 = "3.1.0"
+lazy val scala213               = "2.13.7"
+lazy val scala212               = "2.12.10"
+lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
-licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
+scalaVersion       := scala3
+organization       := "io.github.bcarter97"
+name               := "id-generator"
+description        := "A library for generating reproducible UUIDs"
+semanticdbEnabled  := true
+semanticdbVersion  := scalafixSemanticdb.revision
+crossScalaVersions := supportedScalaVersions
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
-
-publish / skip := true
 
 libraryDependencies ++= all
 
