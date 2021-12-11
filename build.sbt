@@ -5,17 +5,17 @@ lazy val scala213               = "2.13.7"
 lazy val scala212               = "2.12.10"
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
-scalaVersion       := scala3
-organization       := "io.github.bcarter97"
-name               := "id-generator"
-description        := "A library for generating reproducible UUIDs"
-semanticdbEnabled  := true
-semanticdbVersion  := scalafixSemanticdb.revision
-crossScalaVersions := supportedScalaVersions
+organization := "io.github.bcarter97"
+name         := "id-generator"
+description  := "A library for generating reproducible UUIDs"
+
+ThisBuild / semanticdbEnabled                              := true
+ThisBuild / semanticdbVersion                              := scalafixSemanticdb.revision
+ThisBuild / scalaVersion                                   := scala3
+ThisBuild / crossScalaVersions                             := supportedScalaVersions
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
-
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
 
 libraryDependencies ++= all
 
