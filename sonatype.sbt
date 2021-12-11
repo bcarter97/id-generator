@@ -8,7 +8,11 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / publishMavenStyle      := true
 ThisBuild / sonatypeProjectHosting := Some(GitHubHosting("bcarter97", "id-generator", "ben@carter.gg"))
 ThisBuild / pomIncludeRepository   := { _ => false }
-ThisBuild / publishTo              := sonatypePublishToBundle.value
+ThisBuild / publishTo              := {
+  val nexus = "https://s01.oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
 ThisBuild / versionScheme          := Some("early-semver")
 ThisBuild / releaseCrossBuild      := true // true if you cross-build the project for multiple Scala versions
 ThisBuild / releaseProcess         := Seq[ReleaseStep](
