@@ -17,10 +17,11 @@ ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports"
 
 inThisBuild(
   List(
-    organization := "io.github.bcarter97",
-    homepage     := Some(url("https://github.com/bcarter97/id-generator")),
-    licenses     := List("BSD New" -> url("https://opensource.org/licenses/BSD-3-Clause")),
-    developers   := List(
+    organization           := "io.github.bcarter97",
+    sonatypeCredentialHost := "s01.oss.sonatype.org",
+    homepage               := Some(url("https://github.com/bcarter97/id-generator")),
+    licenses               := List("BSD New" -> url("https://opensource.org/licenses/BSD-3-Clause")),
+    developers             := List(
       Developer(
         "bcarter97",
         "Ben Carter",
