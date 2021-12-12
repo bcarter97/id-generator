@@ -1,3 +1,5 @@
+package io.github.bcarter97
+
 import java.util.UUID
 
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
