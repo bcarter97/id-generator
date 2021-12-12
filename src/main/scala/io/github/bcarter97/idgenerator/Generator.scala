@@ -5,8 +5,15 @@ import java.util.UUID
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   private var sampleCounter = 1;
 
-  def id(index: Int, seed: Option[String] = None) =
-    UUID.nameUUIDFromBytes(s"${index.toString}${seed.getOrElse("")}".getBytes).toString
+  /** @param index
+    *   The index to generate the UUID from.
+    * @param parentId
+    *   Optional parent UUID to generate the subId from.
+    * @return
+    *   Returns a reproducible UUID, which can be reversed to get the index, or if it is a subId, the original parentId.
+    */
+  def id(index: Int, parentId: Option[String] = None) =
+    UUID.nameUUIDFromBytes(s"${index.toString}${parentId.getOrElse("")}".getBytes).toString
 
   private val idMap = (1 to maxIndex).map(index => (id(index), index)).toMap
 
