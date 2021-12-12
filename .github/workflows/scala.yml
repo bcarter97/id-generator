@@ -1,6 +1,8 @@
-name: PR Builder
+name: CI Build
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main, dev]
 
