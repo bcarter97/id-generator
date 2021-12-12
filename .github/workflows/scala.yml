@@ -1,6 +1,8 @@
-name: PR Builder
+name: CI Build
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main, dev]
 
@@ -17,4 +19,4 @@ jobs:
       - name: Coursier cache
         uses: coursier/cache-action@v6
       - name: Run tests
-        run: sbt prBuild
+        run: sbt ciBuild

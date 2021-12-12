@@ -30,8 +30,8 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
       val id2       = generator.id(50)
-      val subIds    = generator.generateSubIds(id)
-      val subIds2   = generator.generateSubIds(id2)
+      val subIds    = generator.subIdsFromId(id)
+      val subIds2   = generator.subIdsFromId(id2)
 
       subIds shouldBe subIds2
     }
@@ -55,15 +55,15 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
     "find if a subId is part of an id's sub group" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
-      val subIds    = generator.generateSubIds(id)
+      val subIds    = generator.subIdsFromId(id)
 
-      subIds.foreach(subId => generator.isSubIdFromId(id, subId) shouldBe true)
+      subIds.foreach(subId => generator.isSubIdFromId(subId, id) shouldBe true)
     }
 
     "find the id that generated a list of subIds" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
-      val subIds    = generator.generateSubIds(id)
+      val subIds    = generator.subIdsFromId(id)
 
       subIds.foreach(subId => generator.idFromSubId(subId) shouldBe Some(id))
     }
@@ -72,7 +72,7 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
       val generator = Generator(maxIndex = 100)
       val index     = 50
       val id        = generator.id(index)
-      val subIds    = generator.generateSubIds(id)
+      val subIds    = generator.subIdsFromId(id)
 
       subIds.foreach(subId => generator.indexFromSubId(subId) shouldBe Some(50))
     }
