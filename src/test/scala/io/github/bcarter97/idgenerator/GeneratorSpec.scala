@@ -1,3 +1,5 @@
+package io.github.bcarter97
+
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
