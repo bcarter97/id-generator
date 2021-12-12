@@ -19,4 +19,4 @@ jobs:
       - name: Coursier cache
         uses: coursier/cache-action@v6
       - name: Run tests
-        run: sbt prBuild
+        run: sbt ciBuild

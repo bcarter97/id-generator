@@ -43,4 +43,4 @@ addCommandAlias("checkFmt", "scalafmtCheckAll; scalafmtSbtCheck")
 addCommandAlias("runFmt", "scalafmtAll; scalafmtSbt")
 
 // CI aliases
-addCommandAlias(s"prBuild", "checkFix; checkFmt; +test")
+addCommandAlias("ciBuild", "checkFix; checkFmt; +test")
