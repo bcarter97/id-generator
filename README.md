@@ -22,7 +22,7 @@ import io.github.bcarter97.Generator
 
 object main extends App {
   val generator = Generator()
-  val id = generator.indexToId(5)
+  val id = generator.id(5)
   print(id)
   // e4da3b7f-bbce-3345-9777-2b0674a318d5
 }
