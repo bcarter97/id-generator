@@ -5,6 +5,25 @@
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.bcarter97/id-generator_3?server=https%3A%2F%2Fs01.oss.sonatype.org)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/io.github.bcarter97/id-generator_3?server=https%3A%2F%2Fs01.oss.sonatype.org)
 
-This generates IDs
+Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID.
 
-Wow
+## Usage
+
+In your `build.sbt` add:
+
+```scala
+libraryDependencies += "io.github.bcarter97" %% "id-generator" % "x.x.x"
+```
+
+Then you can import the `Generator` with:
+
+```scala
+import io.github.bcarter97.Generator
+
+object main extends App {
+  val generator = Generator()
+  val id = generator.indexToId(5)
+  print(id)
+  // e4da3b7f-bbce-3345-9777-2b0674a318d5
+}
+```
