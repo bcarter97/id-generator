@@ -10,8 +10,13 @@
 
 ## Releasing
 
-Releasing is currently done semi-automatically. Run `sbt release` and follow the prompts to set the version, next version, and push to VC. The release steps are automatically configured to push to sonatype as part of the release.
+Releasing is done using [`sbt-ci-release`](https://github.com/sbt/sbt-ci-release). When a pull request is merged to master, `sbt-ci-release` will create a snapshot version on Sonatype. To create a new release, run:
 
-## Notes
+```bash
+git tag -a v$VERSION -m "v$VERSION"
+git push origin v$VERSION
+```
 
-- sbt build keys need to match (for example, don't use ThisBuild in `sonatype.sbt` else the release steps won't find it).
+> 💡 The tag **must** start with a `v` followed by your versioning schema, e.g. `v1.0.0`
+
+This will trigger the [`release.yml`](./.github/workflows/release.yml) workflow, which will push the tagged artifact to Sonatype.
