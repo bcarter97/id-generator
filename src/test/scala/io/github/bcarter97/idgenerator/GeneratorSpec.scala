@@ -82,7 +82,7 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
       val ids       = generator.sample(10)
 
       ids.length shouldBe 10
-      ids.distinct.lengthCompare(ids) shouldBe 0
+      ids.distinct.length shouldBe 10
     }
 
     "return two distinct ranges of ids" in {
