@@ -3,8 +3,9 @@ lazy val scala213               = "2.13.7"
 lazy val scala212               = "2.12.15"
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
-name               := "id-generator"
-description        := "Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID."
+name        := "id-generator"
+description := "Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID."
+
 semanticdbEnabled  := true
 semanticdbVersion  := scalafixSemanticdb.revision
 scalaVersion       := scala3
