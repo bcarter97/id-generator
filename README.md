@@ -5,7 +5,7 @@
 [![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.bcarter97/id-generator_3?server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/releases/io/github/bcarter97/)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/io.github.bcarter97/id-generator_3?server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/snapshots/io/github/bcarter97/)
 
-Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID.
+Generate reproducible UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID.
 
 ## Usage
 
@@ -54,7 +54,7 @@ val ids = generator.sample(2)
 // Vector(c4ca4238-a0b9-3382-8dcc-509a6f75849b, c81e728d-9d4c-3f63-af06-7f89cc14862c)
 ```
 
-Similary, you can specify the range of UUIDs to generate, to make the list reproducible:
+Similarly, you can specify the range of UUIDs to generate, to make the list reproducible:
 
 ```scala
 val ids = generator.ids(5, 8)
@@ -63,7 +63,7 @@ val ids = generator.ids(5, 8)
 
 ### Generating sub UUIDs
 
-Sub UUIDs are UUIDs derived from a `parentId`. Each `parentId` has a random, reproducible number of sub UUIDs (the amount of which is specified by `subIds` parameter). Any generated `subId` can be reveresed to find the `parentId` that generated it.
+Sub UUIDs are UUIDs derived from a `parentId`. Each `parentId` has a random, reproducible number of sub UUIDs (the amount of which is specified by `subIds` parameter). Any generated `subId` can be reversed to find the `parentId` that generated it.
 
 To generate a list of `subIds` from a `parentId`:
 
