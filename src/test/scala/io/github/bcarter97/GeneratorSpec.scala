@@ -8,7 +8,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with OptionValues {
 
   "Generator" should {
-    "generate a reproducable UUID" in {
+    "generate a reproducible UUID" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
       val id2       = generator.id(50)
@@ -16,17 +16,35 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
       id2 shouldBe id
     }
 
-    "generate a reproducable amount of subIds given an id" in {
+    "generate a range of reproducible UUIDs" in {
+      val generator = Generator(maxIndex = 10)
+      val ids       = generator.ids(5, 7)
+      val ids2      = generator.ids(5, 7)
+
+      ids.length shouldBe 3
+      ids2 shouldBe ids
+    }
+
+    "guard against going out of bounds when generating a range of reproducible UUIDs" in {
+      val generator = Generator(maxIndex = 10)
+      val ids       = generator.ids(-1, 11)
+      val ids2      = generator.ids(-1, 11)
+
+      ids.length shouldBe 10
+      ids2 shouldBe ids
+    }
+
+    "generate a reproducible amount of subIds given an id" in {
       val generator  = Generator(maxIndex = 100)
       val id         = generator.id(50)
       val id2        = generator.id(50)
       val numSubIds  = generator.numSubIdsForId(id)
-      val numSubIds2 = generator.numSubIdsForId(id)
+      val numSubIds2 = generator.numSubIdsForId(id2)
 
       numSubIds2 shouldBe numSubIds
     }
 
-    "generate a reproducable list of subIds given an id" in {
+    "generate a reproducible list of subIds given an id" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
       val id2       = generator.id(50)
@@ -83,6 +101,28 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with
 
       ids.length shouldBe 10
       ids.distinct.length shouldBe 10
+    }
+
+    "sample a single id if no parameter is specified" in {
+      val generator = Generator(maxIndex = 100)
+      val id        = generator.sample()
+      val id2       = generator.sample()
+
+      id should not be id2
+    }
+
+    "call sample if no index is passed to id" in {
+      val generator  = Generator(maxIndex = 100)
+      val generator2 = Generator(maxIndex = 100)
+
+      val id      = generator.id()
+      val nextId  = generator.id()
+      val id2     = generator2.id()
+      val nextId2 = generator2.id()
+
+      id should not be nextId
+      id shouldBe id2
+      nextId shouldBe nextId2
     }
 
     "return two distinct ranges of ids" in {

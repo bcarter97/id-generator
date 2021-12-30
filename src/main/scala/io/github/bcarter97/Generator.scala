@@ -3,7 +3,7 @@ package io.github.bcarter97
 import java.util.UUID
 
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
-  private var sampleCounter = 1;
+  private var sampleCounter = 1
 
   /** @param index
     *   The index to generate the UUID from.
@@ -13,8 +13,27 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
     *   Returns a reproducible UUID, which can be reversed to get either the original index, or if it is a subId, the
     *   original parentId.
     */
-  def id(index: Int, parentId: Option[String] = None) =
+  def id(index: Int, parentId: Option[String] = None): String =
     UUID.nameUUIDFromBytes(s"${index.toString}${parentId.getOrElse("")}".getBytes).toString
+
+  /** @param startIndex
+    *   The start index to generate the UUIDs from. Minimum index is 1.
+    * @param endIndex
+    *   The end index to generate the UUIDs from. Maximum index is `maxIndex`.
+    * @return
+    *   Returns a range of unique UUIDs.
+    */
+  def ids(startIndex: Int = 0, endIndex: Int = maxIndex): Seq[String] = {
+    val startIndexTrunc = if (startIndex < 1) 1 else startIndex
+    val endIndexTrunc   = if (endIndex > maxIndex) maxIndex else endIndex
+    (startIndexTrunc to endIndexTrunc).map(index => id(index))
+  }
+
+  /** Generates an id using `sample`, making subsequent calls return unique IDs until the `maxIndex` is reached.
+    * @return
+    *   Returns a single, unique ID.
+    */
+  def id(): String = sample()
 
   private val idMap = (1 to maxIndex).map(index => (id(index), index)).toMap
 
@@ -35,7 +54,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   def numSubIdsForId(id: String): Int =
     (BigInt(id.getBytes.slice(0, 1)) % subIds).toInt
 
-  /** @param id
+  /** @param parentId
     *   The Id to find the subIds for.
     *
     * @return
@@ -47,7 +66,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   /** @param subId
     *   The subId to test.
     *
-    * @param id
+    * @param parentId
     *   The parent id to test the subId against.
     *
     * @return
@@ -58,7 +77,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
       case i if id(i, Some(parentId)) == subId => i
     }.isDefined
 
-  /** @param id
+  /** @param subId
     *   The subId to find the original parentId index from.
     *
     * @return
@@ -67,7 +86,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   def indexFromSubId(subId: String): Option[Int] =
     (1 to maxIndex).collectFirst { case i if isSubIdFromId(subId, id(i)) => i }
 
-  /** @param id
+  /** @param subId
     *   The subId to find the original parentId from.
     *
     * @return
@@ -81,10 +100,15 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
     * @return
     *   Returns `n` unique UUIDS.
     */
-  def sample(n: Int = 1): Seq[String] = {
-    val ids = (sampleCounter to sampleCounter + n - 1).map(index => id(index % maxIndex))
+  def sample(n: Int): Seq[String] = {
+    val ids = (sampleCounter until sampleCounter + n).map(index => id(index % maxIndex))
     sampleCounter += n
     ids
   }
+
+  /** @return
+    *   Returns a single unique UUID. Identical to calling `id()`
+    */
+  def sample(): String = sample(1).head
 
 }
