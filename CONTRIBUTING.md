@@ -1,4 +1,4 @@
-# Releasing to Sonatype
+# Contributing
 
 ## Pre-reqs
 
