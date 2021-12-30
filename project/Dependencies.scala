@@ -11,6 +11,10 @@ object Dependencies {
     val all          = Seq(core, laws)
   }
 
+  object Plugins {
+    val organizeImports = "com.github.liancheng" %% "organize-imports" % "0.6.0"
+  }
+
   val logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
 
   val testing = Seq(scalaTest)
