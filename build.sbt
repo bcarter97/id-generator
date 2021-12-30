@@ -1,40 +1,31 @@
-import Dependencies.all
-
 lazy val scala3                 = "3.1.0"
 lazy val scala213               = "2.13.7"
 lazy val scala212               = "2.12.10"
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
-name        := "id-generator"
-description := "A library for generating reproducible UUIDs"
-
+name               := "id-generator"
+description        := "Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID."
 semanticdbEnabled  := true
 semanticdbVersion  := scalafixSemanticdb.revision
 scalaVersion       := scala3
 crossScalaVersions := supportedScalaVersions
 
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
-
-inThisBuild(
-  List(
-    organization           := "io.github.bcarter97",
-    sonatypeCredentialHost := "s01.oss.sonatype.org",
-    homepage               := Some(url("https://github.com/bcarter97/id-generator")),
-    licenses               := List("BSD New" -> url("https://opensource.org/licenses/BSD-3-Clause")),
-    developers             := List(
-      Developer(
-        "bcarter97",
-        "Ben Carter",
-        "ben@carter.gg",
-        url("https://github.com/bcarter97/")
-      )
-    )
+ThisBuild / scalafixDependencies += Dependencies.Plugins.organizeImports
+ThisBuild / organization           := "io.github.bcarter97"
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / homepage               := Some(url("https://github.com/bcarter97/id-generator"))
+ThisBuild / licenses               := List("BSD New" -> url("https://opensource.org/licenses/BSD-3-Clause"))
+ThisBuild / developers             := List(
+  Developer(
+    "bcarter97",
+    "Ben Carter",
+    "ben@carter.gg",
+    url("https://github.com/bcarter97/")
   )
 )
+Global / onChangedBuildSource      := ReloadOnSourceChanges
 
-Global / onChangedBuildSource := ReloadOnSourceChanges
-
-libraryDependencies ++= all
+libraryDependencies ++= Dependencies.all
 
 // Formatting aliases
 addCommandAlias("checkFix", "scalafixAll --check OrganizeImports; scalafixAll --check")
