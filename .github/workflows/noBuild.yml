@@ -1,0 +1,16 @@
+name: CI Build
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - "**.scala"
+      - "**.sbt"
+      - "**.conf"
+      - "**.properties"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "No build required"'
