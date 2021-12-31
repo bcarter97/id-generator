@@ -2,6 +2,9 @@
 
 [![CI Build](https://github.com/bcarter97/id-generator/actions/workflows/scala.yml/badge.svg)](https://github.com/bcarter97/id-generator/actions/workflows/scala.yml)
 [![CI Release](https://github.com/bcarter97/id-generator/actions/workflows/release.yml/badge.svg)](https://github.com/bcarter97/id-generator/actions/workflows/release.yml)
+[![codecov](https://codecov.io/gh/bcarter97/id-generator/branch/main/graph/badge.svg?token=J3A2WGYUJK)](https://codecov.io/gh/bcarter97/id-generator)
+[![Scala Steward badge](https://img.shields.io/badge/Scala_Steward-helping-blue.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAMAAAARSr4IAAAAVFBMVEUAAACHjojlOy5NWlrKzcYRKjGFjIbp293YycuLa3pYY2LSqql4f3pCUFTgSjNodYRmcXUsPD/NTTbjRS+2jomhgnzNc223cGvZS0HaSD0XLjbaSjElhIr+AAAAAXRSTlMAQObYZgAAAHlJREFUCNdNyosOwyAIhWHAQS1Vt7a77/3fcxxdmv0xwmckutAR1nkm4ggbyEcg/wWmlGLDAA3oL50xi6fk5ffZ3E2E3QfZDCcCN2YtbEWZt+Drc6u6rlqv7Uk0LdKqqr5rk2UCRXOk0vmQKGfc94nOJyQjouF9H/wCc9gECEYfONoAAAAASUVORK5CYII=)](https://scala-steward.org)
+
 [![Maven metadata URL](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fbcarter97%2Fid-generator_3%2Fmaven-metadata.xml)](https://mvnrepository.com/artifact/io.github.bcarter97/id-generator)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/io.github.bcarter97/id-generator_3?label=snapshot&server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/snapshots/io/github/bcarter97/id-generator_3/)
 
