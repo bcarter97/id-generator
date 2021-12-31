@@ -8,7 +8,7 @@ description := "Generate reproducable UUIDs based of a sequence of numbers, with
 
 semanticdbEnabled  := true
 semanticdbVersion  := scalafixSemanticdb.revision
-scalaVersion       := scala3
+scalaVersion       := scala213
 crossScalaVersions := supportedScalaVersions
 
 ThisBuild / scalafixDependencies += Dependencies.Plugins.organizeImports
@@ -35,4 +35,5 @@ addCommandAlias("checkFmt", "scalafmtCheckAll; scalafmtSbtCheck")
 addCommandAlias("runFmt", "scalafmtAll; scalafmtSbt")
 
 // CI aliases
-addCommandAlias("ciBuild", "checkFix; checkFmt; +test")
+addCommandAlias("ciBuild", "clean; checkFix; checkFmt; +test")
+addCommandAlias("ciCodeCov", "coverage; test; coverageReport")
