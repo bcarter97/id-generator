@@ -2,9 +2,9 @@ name: CI Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - "**.scala"
       - "**.sbt"
@@ -24,4 +24,8 @@ jobs:
       - name: Coursier cache
         uses: coursier/cache-action@v6
       - name: Run tests
-        run: sbt ciBuild
+        run: |
+          sbt ciBuild
+          sbt ciCodeCov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
