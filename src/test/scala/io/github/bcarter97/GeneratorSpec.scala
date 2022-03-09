@@ -1,11 +1,9 @@
 package io.github.bcarter97
 
-import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-class GeneratorSpec extends AnyWordSpecLike with Matchers with ScalaFutures with OptionValues {
+class GeneratorSpec extends AnyWordSpecLike with Matchers {
 
   "Generator" should {
     "generate a reproducible UUID" in {
