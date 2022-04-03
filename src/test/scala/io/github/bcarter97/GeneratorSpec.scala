@@ -6,6 +6,18 @@ import org.scalatest.wordspec.AnyWordSpecLike
 class GeneratorSpec extends AnyWordSpecLike with Matchers {
 
   "Generator" should {
+    "throw an error if Generator is called with an invalid maxIndex value" in {
+      assertThrows[IllegalArgumentException] {
+        Generator(0)
+      }
+    }
+
+    "throw an error if Generator is called with an invalid subId value" in {
+      assertThrows[IllegalArgumentException] {
+        Generator(1, 0)
+      }
+    }
+
     "generate a reproducible UUID" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
@@ -107,6 +119,12 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers {
       val id2       = generator.sample()
 
       id should not be id2
+    }
+
+    "throw an error if sample is called with a number < 1" in {
+      assertThrows[IllegalArgumentException] {
+        Generator(1).sample(0)
+      }
     }
 
     "call sample if no index is passed to id" in {

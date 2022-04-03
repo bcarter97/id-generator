@@ -3,7 +3,18 @@ package io.github.bcarter97
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
+/** Instantiates a new ID generator.
+  * @param maxIndex
+  *   The maximum number of ids the generator can create.
+  * @param subIds
+  *   The maximum number of subIds the generator can create for any given primary id.
+  * @throws IllegalArgumentException
+  *   if maxIndex is less than 1 or subIds is less than 1.
+  */
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
+  require(maxIndex > 0, "maxIndex must be greater than 0")
+  require(subIds > 0, "subIds must be greater than 0")
+
   lazy private val sampleCounter = new AtomicInteger(1)
 
   /** @param index
@@ -20,17 +31,14 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   /** @param startIndex
     *   The start index to generate the UUIDs from. Minimum index is 1.
     * @param endIndex
-    *   The end index to generate the UUIDs from. Maximum index is `maxIndex`.
+    *   The end index to generate the UUIDs from. Maximum index is [[maxIndex]].
     * @return
     *   Returns a range of unique UUIDs.
     */
-  def ids(startIndex: Int = 0, endIndex: Int = maxIndex): Seq[String] = {
-    val startIndexTrunc = if (startIndex < 1) 1 else startIndex
-    val endIndexTrunc   = if (endIndex > maxIndex) maxIndex else endIndex
-    (startIndexTrunc to endIndexTrunc).map(index => id(index))
-  }
+  def ids(startIndex: Int = 0, endIndex: Int = maxIndex): Seq[String] =
+    (math.max(startIndex, 1) to math.min(endIndex, maxIndex)).map(index => id(index))
 
-  /** Generates an id using `sample`, making subsequent calls return unique IDs until the `maxIndex` is reached.
+  /** Generates an id using [[sample]], making subsequent calls return unique IDs until [[maxIndex]] is reached.
     * @return
     *   Returns a single, unique ID.
     */
@@ -68,7 +76,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
     *   The subId to test.
     *
     * @param parentId
-    *   The parent id to test the subId against.
+    *   The id to test the subId against.
     *
     * @return
     *   True if a subId was generated from the given parentId.
@@ -99,14 +107,15 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
     *   The number of Ids to sample.
     *
     * @return
-    *   Returns `n` unique UUIDS.
+    *   Returns `n` unique UUIDs.
     */
   def sample(n: Int): Seq[String] =
-    (sampleCounter.get() until sampleCounter.getAndIncrement() + n).map(index => id(index % maxIndex))
+    if (n < 1) throw new IllegalArgumentException("n must be greater than 0")
+    else (sampleCounter.get() until sampleCounter.getAndIncrement() + n).map(index => id(index % maxIndex))
 
   /** @return
-    *   Returns a single unique UUID. Identical to calling `id()`
+    *   Returns a single unique UUID.
     */
-  def sample(): String = sample(1).head
+  def sample(): String = sample(1).headOption.getOrElse(id(1))
 
 }
