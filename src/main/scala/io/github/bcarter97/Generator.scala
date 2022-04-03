@@ -1,9 +1,10 @@
 package io.github.bcarter97
 
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
 
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
-  private var sampleCounter = 1
+  lazy private val sampleCounter = new AtomicInteger(1)
 
   /** @param index
     *   The index to generate the UUID from.
@@ -100,11 +101,8 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
     * @return
     *   Returns `n` unique UUIDS.
     */
-  def sample(n: Int): Seq[String] = {
-    val ids = (sampleCounter until sampleCounter + n).map(index => id(index % maxIndex))
-    sampleCounter += n
-    ids
-  }
+  def sample(n: Int): Seq[String] =
+    (sampleCounter.get() until sampleCounter.getAndIncrement() + n).map(index => id(index % maxIndex))
 
   /** @return
     *   Returns a single unique UUID. Identical to calling `id()`
