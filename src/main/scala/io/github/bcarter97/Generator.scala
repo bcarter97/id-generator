@@ -3,8 +3,17 @@ package io.github.bcarter97
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
+/** Instantiates a new ID generator.
+  * @param maxIndex
+  *   The maximum number of ids the generator can create.
+  * @param subIds
+  *   The maximum number of subIds the generator can create for any given primary id.
+  * @throws IllegalArgumentException
+  *   if maxIndex is less than 1 or subIds is less than 1.
+  */
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   require(maxIndex > 0, "maxIndex must be greater than 0")
+  require(subIds > 0, "subIds must be greater than 0")
 
   lazy private val sampleCounter = new AtomicInteger(1)
 
