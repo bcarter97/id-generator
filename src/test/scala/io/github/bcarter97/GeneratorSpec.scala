@@ -12,6 +12,12 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
+    "throw an error if Generator is called with an invalid maxIndex" in {
+      assertThrows[IllegalArgumentException] {
+        Generator(1, 0)
+      }
+    }
+
     "generate a reproducible UUID" in {
       val generator = Generator(maxIndex = 100)
       val id        = generator.id(50)
