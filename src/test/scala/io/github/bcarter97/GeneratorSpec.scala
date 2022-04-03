@@ -6,13 +6,13 @@ import org.scalatest.wordspec.AnyWordSpecLike
 class GeneratorSpec extends AnyWordSpecLike with Matchers {
 
   "Generator" should {
-    "throw an error if Generator is called with an invalid maxIndex" in {
+    "throw an error if Generator is called with an invalid maxIndex value" in {
       assertThrows[IllegalArgumentException] {
         Generator(0)
       }
     }
 
-    "throw an error if Generator is called with an invalid maxIndex" in {
+    "throw an error if Generator is called with an invalid subId value" in {
       assertThrows[IllegalArgumentException] {
         Generator(1, 0)
       }
