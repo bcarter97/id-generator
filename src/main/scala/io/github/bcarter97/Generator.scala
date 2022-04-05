@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
   *   The maximum number of ids the generator can create.
   * @param subIds
   *   The maximum number of subIds the generator can create for any given primary id.
-  * @throws IllegalArgumentException
+  * @throws java.lang.IllegalArgumentException
   *   if maxIndex is less than 1 or subIds is less than 1.
   */
 case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
@@ -38,7 +38,7 @@ case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
   def ids(startIndex: Int = 0, endIndex: Int = maxIndex): Seq[String] =
     (math.max(startIndex, 1) to math.min(endIndex, maxIndex)).map(index => id(index))
 
-  /** Generates an id using [[sample]], making subsequent calls return unique IDs until [[maxIndex]] is reached.
+  /** Generates an id using `sample()`, making subsequent calls return unique IDs until maxIndex is reached.
     * @return
     *   Returns a single, unique ID.
     */
