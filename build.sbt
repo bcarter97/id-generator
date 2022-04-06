@@ -26,7 +26,7 @@ ThisBuild / developers             := List(
 )
 Global / onChangedBuildSource      := ReloadOnSourceChanges
 
-Compile / scalacOptions += "-no-link-warnings"
+Compile / doc / scalacOptions += "-no-link-warnings"
 
 libraryDependencies ++= Dependencies.all
 
