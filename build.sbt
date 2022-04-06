@@ -26,6 +26,8 @@ ThisBuild / developers             := List(
 )
 Global / onChangedBuildSource      := ReloadOnSourceChanges
 
+Compile / doc / scalacOptions += "-no-link-warnings"
+
 libraryDependencies ++= Dependencies.all
 
 // Formatting aliases
