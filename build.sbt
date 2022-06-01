@@ -4,12 +4,15 @@ lazy val scala212               = "2.12.15"
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
 name        := "id-generator"
-description := "Generate reproducable UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID."
+description := "Generate reproducible UUIDs based of a sequence of numbers, with the possibility of generating sub UUIDs from the parent UUID."
 
 semanticdbEnabled  := true
 semanticdbVersion  := scalafixSemanticdb.revision
 scalaVersion       := scala213
 crossScalaVersions := supportedScalaVersions
+
+Global / onChangedBuildSource := ReloadOnSourceChanges
+Global / scalafmtOnCompile    := true
 
 ThisBuild / scalafixDependencies += Dependencies.Plugins.organizeImports
 ThisBuild / organization           := "io.github.bcarter97"
@@ -24,7 +27,6 @@ ThisBuild / developers             := List(
     url("https://github.com/bcarter97/")
   )
 )
-Global / onChangedBuildSource      := ReloadOnSourceChanges
 
 Compile / doc / scalacOptions += "-no-link-warnings"
 

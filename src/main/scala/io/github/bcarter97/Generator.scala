@@ -38,7 +38,7 @@ case class Generator(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
     * @param index
     *   The index to generate the UUID from.
     * @return
-    *   a [[PrimaryId]]
+    *   a new [[PrimaryId]]
     */
   def primaryId(index: Int): PrimaryId =
     indexToPrimaryId.get(index) match {
@@ -82,16 +82,20 @@ case class Generator(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
       }
   }
 
+  private[Generator] def findSubId(uuid: UUID, primaryId: PrimaryId): Option[SubId] =
+    primaryId.subIds.find(_.uuid == uuid)
+
   /** @param uuid
     *   The [[UUID]] to find the original [[SubId]] for, else None if it was generated outside of the [[maxIndex]].
     * @return
     *   the [[SubId]] of the uuid if it exists.
     */
-  def subIdFromUuid(uuid: UUID): Option[SubId] = uuidToSubId.get(uuid) orElse (1 to maxIndex).collectFirst { i =>
-    primaryId(i).subIds.find(_.uuid == uuid) match {
-      case Some(id) => id
+  def subIdFromUuid(uuid: UUID): Option[SubId] =
+    uuidToSubId.get(uuid) orElse (1 to maxIndex).collectFirst { i =>
+      findSubId(uuid, primaryId(i)) match {
+        case Some(id) => id
+      }
     }
-  }
 
   /** Samples a range of [[PrimaryId]]s.
     * @param n
