@@ -17,10 +17,15 @@ case class PrimaryId(index: Int, maxSubIds: Int) extends Id {
     (BigInt(this.value.getBytes.slice(0, 1)) % maxSubIds).toInt
 
   val subIds: Seq[SubId] = (1 to numSubIds).map(SubId(_, this))
+
+  override def toString: String =
+    s"PrimaryId(index=$index, uuid=$uuid, numSubIds=$numSubIds)"
 }
 
 case class SubId(index: Int, primaryId: PrimaryId) extends Id {
   val uuid: UUID = UUID.nameUUIDFromBytes(s"$index${primaryId.index}".getBytes)
 
   val value: String = uuid.toString
+
+  override def toString: String = s"SubId(index=$index, uuid=$uuid, primaryId=${primaryId.toString})"
 }
