@@ -1,121 +1,63 @@
 package io.github.bcarter97
 
+import cats.implicits._
+
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
+import scala.collection.concurrent.TrieMap
 
-/** Instantiates a new ID generator.
-  * @param maxIndex
-  *   The maximum number of ids the generator can create.
-  * @param subIds
-  *   The maximum number of subIds the generator can create for any given primary id.
-  * @throws java.lang.IllegalArgumentException
-  *   if maxIndex is less than 1 or subIds is less than 1.
-  */
-case class Generator(maxIndex: Int = 1000000, subIds: Int = 10) {
-  require(maxIndex > 0, "maxIndex must be greater than 0")
-  require(subIds > 0, "subIds must be greater than 0")
+case class GeneratorV2(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
 
-  lazy private val sampleCounter = new AtomicInteger(1)
+  private lazy val sampleCounter = new AtomicInteger(1)
 
-  /** @param index
-    *   The index to generate the UUID from.
-    * @param parentId
-    *   Optional parent UUID to generate the subId from.
-    * @return
-    *   Returns a reproducible UUID, which can be reversed to get either the original index, or if it is a subId, the
-    *   original parentId.
-    */
-  def id(index: Int, parentId: Option[String] = None): String =
-    UUID.nameUUIDFromBytes(s"${index.toString}${parentId.getOrElse("")}".getBytes).toString
+  private val uuidToPrimaryId: TrieMap[UUID, PrimaryId] = new TrieMap[UUID, PrimaryId]().empty
+  private val indexToPrimaryId: TrieMap[Int, PrimaryId] = new TrieMap[Int, PrimaryId]().empty
+  private val uuidToSubId: TrieMap[UUID, SubId]         = new TrieMap[UUID, SubId]().empty
 
-  /** @param startIndex
-    *   The start index to generate the UUIDs from. Minimum index is 1.
-    * @param endIndex
-    *   The end index to generate the UUIDs from. Maximum index is [[maxIndex]].
-    * @return
-    *   Returns a range of unique UUIDs.
-    */
-  def ids(startIndex: Int = 0, endIndex: Int = maxIndex): Seq[String] =
-    (math.max(startIndex, 1) to math.min(endIndex, maxIndex)).map(index => id(index))
+  def clearUuidToPrimaryIdCache(): Unit = uuidToPrimaryId.clear()
+  def clearIndexCache(): Unit           = indexToPrimaryId.clear()
+  def clearUuidToSubIdCache(): Unit     = uuidToSubId.clear()
+  def clearCache(): Unit                = {
+    clearUuidToPrimaryIdCache()
+    clearIndexCache()
+    clearUuidToSubIdCache()
+  }
 
-  /** Generates an id using `sample()`, making subsequent calls return unique IDs until maxIndex is reached.
-    * @return
-    *   Returns a single, unique ID.
-    */
-  def id(): String = sample()
+  def primaryId(index: Int): PrimaryId =
+    indexToPrimaryId.get(index) match {
+      case Some(id) => id
+      case None     =>
+        val newId = PrimaryId(index, maxSubIds)
+        indexToPrimaryId.put(index, newId)
+        uuidToPrimaryId.put(newId.uuid, newId)
+        newId.subIds.foreach(subId => uuidToSubId.put(subId.uuid, subId))
+        newId
+    }
 
-  private val idMap = (1 to maxIndex).map(index => (id(index), index)).toMap
+  def primaryId(): PrimaryId = sample()
 
-  /** @param id
-    *   The UUID to reverse.
-    *
-    * @return
-    *   The index of the UUID, or None if it is not a valid UUID.
-    */
-  def index(id: String): Option[Int] = idMap.get(id)
+  def primaryIds(startIndex: Int, endIndex: Int): Seq[PrimaryId] =
+    (math.max(startIndex, 1) to math.min(endIndex, maxIndex)).map(primaryId)
 
-  /** @param id
-    *   the Id to find the number of subIds for.
-    *
-    * @return
-    *   The number of SubIds for the given Id.
-    */
-  def numSubIdsForId(id: String): Int =
-    (BigInt(id.getBytes.slice(0, 1)) % subIds).toInt
+  def index(uuid: UUID): Option[Int] = uuidToPrimaryId.get(uuid) match {
+    case Some(id) => id.index.some
+    case None     =>
+      (1 to maxIndex).collectFirst {
+        case i if primaryId(i).uuid == uuid => i
+      }
+  }
 
-  /** @param parentId
-    *   The Id to find the subIds for.
-    *
-    * @return
-    *   The subIds for the given Id.
-    */
-  def subIdsFromId(parentId: String): Seq[String] =
-    (1 to numSubIdsForId(parentId)).map(i => id(i, Some(parentId))).toList
+  def subIdFromUuid(uuid: UUID): Option[SubId] = uuidToSubId.get(uuid) orElse (1 to maxIndex).collectFirst { i =>
+    primaryId(i).subIds.find(_.uuid == uuid) match {
+      case Some(id) => id
+    }
+  }
 
-  /** @param subId
-    *   The subId to test.
-    *
-    * @param parentId
-    *   The id to test the subId against.
-    *
-    * @return
-    *   True if a subId was generated from the given parentId.
-    */
-  def isSubIdFromId(subId: String, parentId: String): Boolean =
-    (1 to subIds).collectFirst {
-      case i if id(i, Some(parentId)) == subId => i
-    }.isDefined
-
-  /** @param subId
-    *   The subId to find the original parentId index from.
-    *
-    * @return
-    *   The index of the parentId if it exists.
-    */
-  def indexFromSubId(subId: String): Option[Int] =
-    (1 to maxIndex).collectFirst { case i if isSubIdFromId(subId, id(i)) => i }
-
-  /** @param subId
-    *   The subId to find the original parentId from.
-    *
-    * @return
-    *   The parentId a subId is derived from it exists.
-    */
-  def idFromSubId(subId: String): Option[String] = indexFromSubId(subId).map(id(_))
-
-  /** @param n
-    *   The number of Ids to sample.
-    *
-    * @return
-    *   Returns `n` unique UUIDs.
-    */
-  def sample(n: Int): Seq[String] =
+  def sample(n: Int): Seq[PrimaryId] =
     if (n < 1) throw new IllegalArgumentException("n must be greater than 0")
-    else (sampleCounter.get() until sampleCounter.getAndIncrement() + n).map(index => id(index % maxIndex))
+    else
+      (sampleCounter.get() until sampleCounter.getAndIncrement() + n).map(index => primaryId(index % maxIndex))
 
-  /** @return
-    *   Returns a single unique UUID.
-    */
-  def sample(): String = sample(1).headOption.getOrElse(id(1))
+  def sample(): PrimaryId = sample(1).headOption.getOrElse(primaryId(1))
 
 }
