@@ -6,103 +6,70 @@ import org.scalatest.wordspec.AnyWordSpecLike
 class GeneratorSpec extends AnyWordSpecLike with Matchers {
 
   "Generator" should {
-    "throw an error if Generator is called with an invalid maxIndex value" in {
-      assertThrows[IllegalArgumentException] {
-        Generator(0)
-      }
-    }
-
-    "throw an error if Generator is called with an invalid subId value" in {
-      assertThrows[IllegalArgumentException] {
-        Generator(1, 0)
-      }
-    }
-
-    "generate a reproducible UUID" in {
+    "Generate a reproducible PrimaryId" in {
       val generator = Generator(maxIndex = 100)
-      val id        = generator.id(50)
-      val id2       = generator.id(50)
+      val id        = generator.primaryId(50)
+      val id2       = generator.primaryId(50)
 
-      id2 shouldBe id
+      id shouldBe id2
     }
 
-    "generate a range of reproducible UUIDs" in {
+    "Generate a range of reproducible PrimaryIds" in {
       val generator = Generator(maxIndex = 10)
-      val ids       = generator.ids(5, 7)
-      val ids2      = generator.ids(5, 7)
+      val ids       = generator.primaryIds(5, 10)
+      val ids2      = generator.primaryIds(5, 10)
 
-      ids.length shouldBe 3
-      ids2 shouldBe ids
+      ids shouldBe ids2
     }
 
     "guard against going out of bounds when generating a range of reproducible UUIDs" in {
       val generator = Generator(maxIndex = 10)
-      val ids       = generator.ids(-1, 11)
-      val ids2      = generator.ids(-1, 11)
+      val ids       = generator.primaryIds(-1, 11)
+      val ids2      = generator.primaryIds(-1, 11)
 
       ids.length shouldBe 10
       ids2 shouldBe ids
     }
 
     "generate a reproducible amount of subIds given an id" in {
-      val generator  = Generator(maxIndex = 100)
-      val id         = generator.id(50)
-      val id2        = generator.id(50)
-      val numSubIds  = generator.numSubIdsForId(id)
-      val numSubIds2 = generator.numSubIdsForId(id2)
+      val generator = Generator(maxIndex = 100)
+      val id        = generator.primaryId(50)
+      val id2       = generator.primaryId(50)
 
-      numSubIds2 shouldBe numSubIds
+      id.numSubIds shouldBe id2.numSubIds
     }
 
     "generate a reproducible list of subIds given an id" in {
       val generator = Generator(maxIndex = 100)
-      val id        = generator.id(50)
-      val id2       = generator.id(50)
-      val subIds    = generator.subIdsFromId(id)
-      val subIds2   = generator.subIdsFromId(id2)
+      val id        = generator.primaryId(50)
+      val id2       = generator.primaryId(50)
 
-      subIds shouldBe subIds2
+      id.subIds shouldBe id2.subIds
     }
 
-    "return which index created a specific id" in {
+    "return which index created a specific primaryId" in {
       val generator = Generator(maxIndex = 100)
-      val id        = generator.id(50)
-      val idIndex   = generator.index(id)
+      val id        = generator.primaryId(50)
+      generator.clearCache()
 
-      idIndex shouldBe Some(50)
+      generator.index(id.uuid) shouldBe Some(50)
     }
 
     "return none if no index for a specific id was found" in {
       val generator = Generator(maxIndex = 100)
-      val id        = generator.id(500)
-      val idIndex   = generator.index(id)
+      val id        = generator.primaryId(500)
+      generator.clearCache()
 
-      idIndex shouldBe None
-    }
-
-    "find if a subId is part of an id's sub group" in {
-      val generator = Generator(maxIndex = 100)
-      val id        = generator.id(50)
-      val subIds    = generator.subIdsFromId(id)
-
-      subIds.foreach(subId => generator.isSubIdFromId(subId, id) shouldBe true)
+      generator.index(id.uuid) shouldBe None
     }
 
     "find the id that generated a list of subIds" in {
       val generator = Generator(maxIndex = 100)
-      val id        = generator.id(50)
-      val subIds    = generator.subIdsFromId(id)
+      val id        = generator.primaryId(50)
+      val subIds    = id.subIds
+      generator.clearCache()
 
-      subIds.foreach(subId => generator.idFromSubId(subId) shouldBe Some(id))
-    }
-
-    "find the index that generated a list of subIds" in {
-      val generator = Generator(maxIndex = 100)
-      val index     = 50
-      val id        = generator.id(index)
-      val subIds    = generator.subIdsFromId(id)
-
-      subIds.foreach(subId => generator.indexFromSubId(subId) shouldBe Some(50))
+      subIds.foreach(subId => generator.subIdFromUuid(subId.uuid).map(_.primaryId) shouldBe Some(id))
     }
 
     "sample a range of ids" in {
@@ -131,10 +98,10 @@ class GeneratorSpec extends AnyWordSpecLike with Matchers {
       val generator  = Generator(maxIndex = 100)
       val generator2 = Generator(maxIndex = 100)
 
-      val id      = generator.id()
-      val nextId  = generator.id()
-      val id2     = generator2.id()
-      val nextId2 = generator2.id()
+      val id      = generator.primaryId()
+      val nextId  = generator.primaryId()
+      val id2     = generator2.primaryId()
+      val nextId2 = generator2.primaryId()
 
       id should not be nextId
       id shouldBe id2
