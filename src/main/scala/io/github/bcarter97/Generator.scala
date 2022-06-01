@@ -1,12 +1,13 @@
 package io.github.bcarter97
 
-import cats.implicits._
-
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
+
+import cats.implicits._
+
 import scala.collection.concurrent.TrieMap
 
-case class GeneratorV2(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
+case class Generator(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
 
   private lazy val sampleCounter = new AtomicInteger(1)
 
