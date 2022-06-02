@@ -5,8 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import cats.implicits._
 
-import scala.collection.concurrent.TrieMap
-
 /** Instantiates a new ID generator.
   * @param maxIndex
   *   The maximum number of ids the generator can create.
@@ -15,23 +13,29 @@ import scala.collection.concurrent.TrieMap
   * @throws java.lang.IllegalArgumentException
   *   if maxIndex is less than 1 or subIds is less than 1.
   */
-case class Generator(maxIndex: Int = 1000000, maxSubIds: Int = 10) {
+case class Generator(maxIndex: Int = 1000000, maxSubIds: Int = 10, preCache: Boolean = false) {
   require(maxIndex > 0, "maxIndex must be greater than 0")
   require(maxSubIds > 0, "subIds must be greater than 0")
 
   private lazy val sampleCounter = new AtomicInteger(1)
 
-  private val uuidToPrimaryId: TrieMap[UUID, PrimaryId] = new TrieMap[UUID, PrimaryId]().empty
-  private val indexToPrimaryId: TrieMap[Int, PrimaryId] = new TrieMap[Int, PrimaryId]().empty
-  private val uuidToSubId: TrieMap[UUID, SubId]         = new TrieMap[UUID, SubId]().empty
+  private val uuidToPrimaryId: IdMap[UUID, PrimaryId] = new IdMap[UUID, PrimaryId]()
+  private val indexToPrimaryId: IdMap[Int, PrimaryId] = new IdMap[Int, PrimaryId]()
+  private val uuidToSubId: IdMap[UUID, SubId]         = new IdMap[UUID, SubId]()
 
-  def clearUuidToPrimaryIdCache(): Unit = uuidToPrimaryId.clear()
-  def clearIndexCache(): Unit           = indexToPrimaryId.clear()
-  def clearUuidToSubIdCache(): Unit     = uuidToSubId.clear()
-  def clearCache(): Unit                = {
-    clearUuidToPrimaryIdCache()
-    clearIndexCache()
-    clearUuidToSubIdCache()
+  if (preCache) {
+    (1 to maxIndex).foreach { i =>
+      val primaryId = PrimaryId(i, maxSubIds)
+      uuidToPrimaryId.put(primaryId.uuid, primaryId)
+      indexToPrimaryId.put(primaryId.index, primaryId)
+      primaryId.subIds.foreach(subId => uuidToSubId.put(subId.uuid, subId))
+    }
+  }
+
+  def clearCache(): Unit = {
+    uuidToPrimaryId.clear()
+    indexToPrimaryId.clear()
+    uuidToSubId.clear()
   }
 
   /** Generates a new [[PrimaryId]] at the given index.
