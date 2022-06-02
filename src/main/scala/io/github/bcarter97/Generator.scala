@@ -5,8 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import cats.implicits._
 
-import scala.collection.concurrent.TrieMap
-
 /** Instantiates a new ID generator.
   * @param maxIndex
   *   The maximum number of ids the generator can create.
