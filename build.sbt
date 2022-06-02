@@ -27,6 +27,7 @@ ThisBuild / developers             := List(
     url("https://github.com/bcarter97/")
   )
 )
+ThisBuild / versionScheme          := Some("early-semver")
 
 Compile / doc / scalacOptions += "-no-link-warnings"
 
