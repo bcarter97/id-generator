@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scalaTest = "org.scalatest" %% "scalatest" % "3.2.12" % Test
+  val scalaTest = "org.scalatest" %% "scalatest" % "3.2.13" % Test
 
   object Cats {
     private val cats = "2.8.0"
