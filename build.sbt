@@ -1,6 +1,6 @@
 lazy val scala3                 = "3.3.0"
 lazy val scala213               = "2.13.11"
-lazy val scala212               = "2.12.18"
+lazy val scala212               = "2.12.20"
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
 name        := "id-generator"
